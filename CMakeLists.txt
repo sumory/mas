@@ -1,0 +1,33 @@
+cmake_minimum_required (VERSION 2.8)
+
+project (mas C CXX)
+
+set(mas_VERSION_MAJOR 1)
+set(mas_VERSION_MINOR 0)
+set(mas_VERSION_PATCH 1)
+
+add_compile_options(-std=c++11)
+
+set(CMAKE_MACOSX_RPATH 0)
+
+set (EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set (LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+
+set(mas_SRCS mas/store.cpp)
+
+include_directories(${PROJECT_SOURCE_DIR})
+
+add_library(mas SHARED ${mas_SRCS})
+SET_TARGET_PROPERTIES (mas PROPERTIES VERSION 
+    ${mas_VERSION_MAJOR}.${mas_VERSION_MINOR}.${mas_VERSION_PATCH} SOVERSION 1)
+
+add_library(mas_static STATIC ${mas_SRCS})
+SET_TARGET_PROPERTIES (mas_static PROPERTIES OUTPUT_NAME "mas")
+
+GET_TARGET_PROPERTY (OUTPUT_VALUE mas_static OUTPUT_NAME)
+MESSAGE (STATUS "the mas_static OUTPUT_NAME: " ${OUTPUT_VALUE})
+
+SET_TARGET_PROPERTIES (mas_static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+SET_TARGET_PROPERTIES (mas PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+
+add_subdirectory(test)
